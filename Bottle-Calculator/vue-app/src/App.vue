@@ -273,16 +273,16 @@ export default {
       downloadLink.click();
       document.body.removeChild(downloadLink);
 
-      this.sendEmailWithImageLink('wordpress@program', telephone, dataURL);
+      this.sendEmailWithImageLink(email, telephone);
       this.acceptOverlay();
     },
 
-    sendEmailWithImageLink(email, telephone, dataURL) {
+    sendEmailWithImageLink(email, telephone) {
       const data = {
         action: 'save_image_and_send_email',
         email: email,
         telephone: telephone,
-        dataURL: dataURL,
+        fileName: this.bottleName,
       };
 
       fetch(`${window.location.origin}/wp-admin/admin-ajax.php`, {

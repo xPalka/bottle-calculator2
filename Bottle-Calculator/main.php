@@ -40,49 +40,14 @@ add_shortcode('bottle_calculator', 'bottle_calc_shortcode');
 function save_image_and_send_email() {
 
     // Sprawdź, czy dane są przekazywane
-    if (!isset($_POST['email']) || !isset($_POST['dataURL']) || !isset($_POST['fileName']) || !isset($_POST['telephone'])) {
+    if (!isset($_POST['email']) || !isset($_POST['fileName']) || !isset($_POST['telephone'])) {
         wp_send_json_error('Brak wymaganego parametru.');
         wp_die();
     }
 
     $email = ($_POST['email']);
     $telephone = ($_POST['telephone']);
-    $dataURL = wp_unslash($_POST['dataURL']);
     $fileName = sanitize_text_field($_POST['fileName']);
-
-// Zapis butelki i wysłanie linku
-//    $dataURL = str_replace('\/', '/', $dataURL);
-//
-//    // Sprawdź, czy dataURL zawiera prefiks base64
-//    if (!str_starts_with($dataURL, 'data:image/png;base64,')) {
-//        wp_send_json_error('Nieprawidłowy format danych obrazu.');
-//        wp_die();
-//    }
-//
-//    // Odkodowanie base64 do binarnego obrazu
-//    $data = str_replace('data:image/png;base64,', '', $dataURL);
-//    $image_data = base64_decode($data);
-//
-//    if ($image_data === false) {
-//        wp_send_json_error('Nie udało się dekodować danych obrazu.');
-//        wp_die();
-//    }
-//
-//    $file_name = $fileName . '_' . time() . '.png';
-//    $file_path = BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads/' . $file_name;
-//
-//    // Upewnij się, że katalog uploads istnieje
-//    if (!file_exists(BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads')) {
-//        mkdir(BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads', 0755, true);
-//    }
-//
-//    // Zapisz plik
-//    if (file_put_contents($file_path, $image_data) === false) {
-//        wp_send_json_error('Nie udało się zapisać pliku.');
-//        wp_die();
-//    }
-//
-//    $file_url = content_url('/plugins/bottle-calculator/uploads/'.$file_name);
 
     $subject = 'Marki Własne - Wygenerowano wizualizacje';
     $message = "
