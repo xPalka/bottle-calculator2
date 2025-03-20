@@ -1,5 +1,4 @@
 <template>
-
   <div id="bottle-calculator-wrap">
     <section id="bottle-calculator">
       <div id="bottle-calculator-card">
@@ -20,37 +19,46 @@
       <div id="bottle-calculator-aside">
         <div class="bottle-calculator-card">
           <div>
-            <h5 style="margin-top: 0;">1. Wybierz produkt</h5>
+            <h5 style="margin-top: 0;">{{ translations[currentLang].step1 }}</h5>
             <select v-model="selectedBottleIndex" @change="selectBottle">
               <option v-for="(bottle, index) in jsonData.bottles" :key="index" :value="index">
-                Produkt {{ index + 1 }}
+                {{ translations[currentLang].product }} {{ index + 1 }}
               </option>
             </select>
           </div>
           <div>
-            <h5>2. Wybierz butelkę</h5>
+            <h5>{{ translations[currentLang].step2 }}</h5>
             <select v-model="selectedCapIndex" @change="loadCapImage">
               <option v-for="(cap, index) in selectedBottle.caps" :key="index" :value="index">
-                Butelka {{ index + 1 }}
+                {{ translations[currentLang].bottle }} {{ index + 1 }}
               </option>
             </select>
           </div>
 
-
           <div class="button-row">
-            <h5>3. Prześlij etykietę</h5>
-            <input id="bottle-label-image-load" ref="fileInput" type="file" @change="uploadImage"/>
-            <button class="accept-overlay" v-if="uploadedImage" @click="acceptOverlay">Umieść etykietę</button>
-            <div v-if="!uploadedImage" style="height: 37px;"></div>
+            <h5>{{ translations[currentLang].step3 }}</h5>
+            <input id="bottle-label-image-load" ref="fileInput" type="file" @change="uploadImage" hidden />
+            <button style="width: 100%; padding: 0;">
+              <label style="width: 100%; height: 100%;padding: 8px 0; display:flex; justify-content: center; align-content: center;" for="bottle-label-image-load" class="custom-file-upload">
+                {{ translations[currentLang].chooseFile }}
+              </label>
+            </button>
+            <button style="width: 100% !important;" class="accept-overlay" v-if="uploadedImage" @click="acceptOverlay">
+              {{ translations[currentLang].placeLabel }}
+            </button>
+            <div v-if="!uploadedImage" style="height: 40px;"></div>
           </div>
 
           <div id="button-calculator-download-container">
-            <h5>4. Pobierz swoją wizualizacje</h5>
+            <h5>{{ translations[currentLang].step4 }}</h5>
             <div class="bottle-download-name-container">
-              <input class="bottle-download-name" type="text" v-model="bottleName" maxlength="50" placeholder="Enter the name of your bottle"/>
+              <input class="bottle-download-name" type="text" v-model="bottleName" maxlength="50"
+                     :placeholder="translations[currentLang].enterName" />
             </div>
             <div class="bottle-download-name-container-download">
-              <button class="resize-button" :disabled="bottleName === ''" v-for="size in downloadSizes" :key="size.width" @click="resizeAndDownloadImage(size.width, size.height)">
+              <button class="resize-button" :disabled="bottleName === ''"
+                      v-for="size in downloadSizes" :key="size.width"
+                      @click="resizeAndDownloadImage(size.width, size.height)">
                 {{ size.width }}x{{ size.height }}
               </button>
             </div>
@@ -63,11 +71,12 @@
       <DownloadModal
           v-if="showModal"
           :visible="showModal"
+          :translations="translations"
+          :currentLang="currentLang"
           @submit="handleEmailSubmit"
           @close="showModal = false"
       />
     </transition>
-
   </div>
 </template>
 
@@ -81,6 +90,63 @@ export default {
   components: {DownloadModal},
   data() {
     return {
+      currentLang: 'en', // Domyślny język
+      translations: {
+        pl: {
+          step1: "1. Wybierz produkt",
+          step2: "2. Wybierz butelkę",
+          step3: "3. Prześlij etykietę",
+          step4: "4. Pobierz swoją wizualizację",
+          product: "Produkt",
+          bottle: "Butelka",
+          placeLabel: "Umieść etykietę",
+          enterName: "Podaj nazwę wizualizacji",
+          chooseFile: "Wybierz plik",
+
+          modalTitle: "5. Pobierz wizualizacje",
+          email: "Adres email",
+          phone: "Telefon kontaktowy",
+          emailPlaceholder: "Adres email",
+          phonePlaceholder: "Telefon",
+          acceptMarketing: "Akceptuję zgodę marketingową, która zawiera",
+          acceptTerms: "Akceptuję regulamin, który zawiera",
+          showMore: "[...]",
+          hideText: "[ukryj]",
+          termsText: "ipsum dolor sit amet, consectetur adipiscing elit. Quisque id diam sit amet odio tempus auctor...",
+          termsText2: "Nam eget risus at magna dictum bibendum. Vivamus ut sapien ac quam condimentum suscipit...",
+          downloadImage: "Pobierz obraz",
+          cancel: "Anuluj",
+          close: "Zamknij",
+          errorMessage: "Wystąpił błąd. Spróbuj ponownie."
+        },
+        en: {
+          step1: "1. Select a product",
+          step2: "2. Choose a bottle",
+          step3: "3. Upload a label",
+          step4: "4. Download your visualization",
+          product: "Product",
+          bottle: "Bottle",
+          placeLabel: "Place Label",
+          enterName: "Enter visualization name",
+          chooseFile: "Choose file",
+
+          modalTitle: "5. Download visualization",
+          email: "Email address",
+          phone: "Contact phone",
+          emailPlaceholder: "Email address",
+          phonePlaceholder: "Phone",
+          acceptMarketing: "I accept the marketing consent, which includes",
+          acceptTerms: "I accept the terms and conditions, which include",
+          showMore: "[...]",
+          hideText: "[hide]",
+          termsText: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id diam sit amet odio tempus auctor...",
+          termsText2: "Nam eget risus at magna dictum bibendum. Vivamus ut sapien ac quam condimentum suscipit...",
+          downloadImage: "Download image",
+          cancel: "Cancel",
+          close: "Close",
+          errorMessage: "An error occurred. Please try again."
+        },
+      }, // okno tłumaczeń
       loading: true,
       selectedBottleIndex: 0, // Index of the selected bottle in the array
       selectedCapIndex: 0, // Index of the selected bottle in the array
@@ -108,6 +174,8 @@ export default {
     };
   },
   mounted() {
+    // const wpLang = window.wpData?.lang?.split('_')[0] || 'pl';
+
     this.$nextTick(() => {
       if (typeof fabric !== 'undefined') {
         this.initFabric();
@@ -136,7 +204,6 @@ export default {
     initFabric() {
       const canvasElement = this.$refs.fabricCanvas;
       if (!canvasElement) {
-        console.error('Canvas element not found.');
         return;
       }
 
@@ -295,7 +362,6 @@ export default {
           .then(response => response.json())
           .catch(error => {
             console.error('Błąd:', error);
-            // alert('Wystąpił błąd podczas wysyłania e-maila.');
           });
     },
 

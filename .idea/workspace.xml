@@ -6,8 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ba4bca5f-434e-4438-8905-e9e08c608b69" name="Changes" comment="feat">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/main.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/assets/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/assets/css/main.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/assets/css/main.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/assets/scss/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/assets/scss/main.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/components/DownloadModal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/components/DownloadModal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +64,7 @@
       <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\src" />
       <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\public" />
     </key>
   </component>
@@ -75,7 +80,8 @@
       <workItem from="1739952606147" duration="24000" />
       <workItem from="1740037129699" duration="6594000" />
       <workItem from="1742378365493" duration="9549000" />
-      <workItem from="1742452996985" duration="3785000" />
+      <workItem from="1742452996985" duration="5554000" />
+      <workItem from="1742465676996" duration="5006000" />
     </task>
     <task id="LOCAL-00001" summary="feat">
       <option name="closed" value="true" />
@@ -85,7 +91,23 @@
       <option name="project" value="LOCAL" />
       <updated>1742456674504</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat">
+      <option name="closed" value="true" />
+      <created>1742457058099</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1742457058099</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat">
+      <option name="closed" value="true" />
+      <created>1742458436747</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1742458436747</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
