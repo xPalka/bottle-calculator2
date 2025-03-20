@@ -18,7 +18,7 @@ const BOOTLE_CALCULATOR_PLUGIN = __FILE__;
 const BOOTLE_CALCULATOR_PLUGIN_DIR = __DIR__;
 
 function bottle_calc_shortcode() {
-    $plugin_url = plugin_dir_url(__FILE__)  . '/vue-app/dist';
+    $plugin_url = plugin_dir_url(__FILE__)  . 'vue-app';
     $css_file = '/css/app.css';
     $chunk_file = '/js/chunk-vendors.js';
     $app_file = '/js/app.js';
