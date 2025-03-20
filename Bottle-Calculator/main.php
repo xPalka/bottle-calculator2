@@ -40,88 +40,80 @@ add_shortcode('bottle_calculator', 'bottle_calc_shortcode');
 function save_image_and_send_email() {
 
     // Sprawdź, czy dane są przekazywane
-    if (!isset($_POST['email']) || !isset($_POST['dataURL']) || !isset($_POST['fileName'])) {
+    if (!isset($_POST['email']) || !isset($_POST['dataURL']) || !isset($_POST['fileName']) || !isset($_POST['telephone'])) {
         wp_send_json_error('Brak wymaganego parametru.');
         wp_die();
     }
 
     $email = ($_POST['email']);
+    $telephone = ($_POST['telephone']);
     $dataURL = wp_unslash($_POST['dataURL']);
     $fileName = sanitize_text_field($_POST['fileName']);
-    $dataURL = str_replace('\/', '/', $dataURL);
 
-    // Sprawdź, czy dataURL zawiera prefiks base64
-    if (!str_starts_with($dataURL, 'data:image/png;base64,')) {
-        wp_send_json_error('Nieprawidłowy format danych obrazu.');
-        wp_die();
-    }
+// Zapis butelki i wysłanie linku
+//    $dataURL = str_replace('\/', '/', $dataURL);
+//
+//    // Sprawdź, czy dataURL zawiera prefiks base64
+//    if (!str_starts_with($dataURL, 'data:image/png;base64,')) {
+//        wp_send_json_error('Nieprawidłowy format danych obrazu.');
+//        wp_die();
+//    }
+//
+//    // Odkodowanie base64 do binarnego obrazu
+//    $data = str_replace('data:image/png;base64,', '', $dataURL);
+//    $image_data = base64_decode($data);
+//
+//    if ($image_data === false) {
+//        wp_send_json_error('Nie udało się dekodować danych obrazu.');
+//        wp_die();
+//    }
+//
+//    $file_name = $fileName . '_' . time() . '.png';
+//    $file_path = BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads/' . $file_name;
+//
+//    // Upewnij się, że katalog uploads istnieje
+//    if (!file_exists(BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads')) {
+//        mkdir(BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads', 0755, true);
+//    }
+//
+//    // Zapisz plik
+//    if (file_put_contents($file_path, $image_data) === false) {
+//        wp_send_json_error('Nie udało się zapisać pliku.');
+//        wp_die();
+//    }
+//
+//    $file_url = content_url('/plugins/bottle-calculator/uploads/'.$file_name);
 
-    // Odkodowanie base64 do binarnego obrazu
-    $data = str_replace('data:image/png;base64,', '', $dataURL);
-    $image_data = base64_decode($data);
-
-    if ($image_data === false) {
-        wp_send_json_error('Nie udało się dekodować danych obrazu.');
-        wp_die();
-    }
-
-    $file_name = $fileName . '_' . time() . '.png';
-    $file_path = BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads/' . $file_name;
-
-    // Upewnij się, że katalog uploads istnieje
-    if (!file_exists(BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads')) {
-        mkdir(BOOTLE_CALCULATOR_PLUGIN_DIR . '/uploads', 0755, true);
-    }
-
-    // Zapisz plik
-    if (file_put_contents($file_path, $image_data) === false) {
-        wp_send_json_error('Nie udało się zapisać pliku.');
-        wp_die();
-    }
-
-    $file_url = content_url('/plugins/bottle-calculator/uploads/'.$file_name);
-
-    // Przygotowanie treści e-maila
-    $mail = new PHPMailer(true);
-    $subject = 'Link do pobrania obrazu';
+    $subject = 'Marki Własne - Wygenerowano wizualizacje';
     $message = "
             <html lang='pl'>
             <head>
-                <title>Link do pobrania obrazu</title>
+                <title>Marki Własne - Wygenerowano wizualizacje</title>
             </head>
             <body>
-                <h2>Link do pobrania obrazu</h2>
-                <p>Kliknij poniższy link, aby pobrać obraz etykiety wygenerowanej butelki:</p>
-                <a href='$file_url' style='display: inline-block; padding: 10px 20px; color: #ffffff; background-color: #0073aa; text-decoration: none; border-radius: 5px;'>Pobierz obraz</a>
+                <h2>Dane klienta, który wygenerował wizualizację:</h2>
+                <ul>
+                    <li>Nazwa wizualizacji: $fileName</li>
+                    <li>Email klienta: $email</li>
+                    <li>Numer telefonu: $telephone</li>
+                    <li></li>
+                </ul>
             </body>
             </html>
             ";
 
 
-    try {
-        // Serwer SMTP
-        $mail->isSMTP();
-        $mail->Host = 'c1896.lh.pl';  // Adres serwera SMTP
-        $mail->SMTPAuth = true;
-        $mail->Username = 'dev@programigo.com';  // Adres e-mail nadawcy
-        $mail->Password = '6Oa0H5QyZ';  // Hasło e-maila nadawcy
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;  // TLS
-        $mail->Port = 587;
+    $headers = array(
+        'Content-Type: text/html; charset=UTF-8',
+        'From: Marki Własne <no-reply@markiwlasne.pl>'
+    );
 
-        $mail->setFrom('dev@programigo.com', 'Your Name');
-        $mail->addAddress('szymon.palka@programigo.com', 'Recipient Name');
-
-        // Treść wiadomości
-        $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body    = $message;
-        $mail->CharSet = "UTF-8";
-
-        $mail->send();
+    if (wp_mail($email, $subject, $message, $headers)) {
         wp_send_json_success('Wiadomość została wysłana pomyślnie!');
-    } catch (Exception $e) {
+    } else {
         wp_send_json_error('Nie udało się wysłać email.');
     }
+
 
     wp_die();
 }

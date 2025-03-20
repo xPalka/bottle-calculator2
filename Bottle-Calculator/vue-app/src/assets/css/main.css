@@ -1,0 +1,248 @@
+@charset "UTF-8";
+#bottle-calculator-wrap {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  gap: 16px;
+}
+#bottle-calculator-wrap .form-check-label-bottle-modal, #bottle-calculator-wrap .terms-body-text.expand-btn {
+  position: relative;
+  bottom: 8px;
+}
+#bottle-calculator-wrap .form-check-label-bottle-modal {
+  margin-left: 12px;
+}
+#bottle-calculator-wrap .bottle-calculator-card {
+  padding: 24px;
+  border: 1px solid #E8E8E8;
+  background: white;
+  border-radius: 10px;
+}
+#bottle-calculator-wrap .bottle-calculator-card h5 {
+  margin: 32px 0 8px 0;
+  font-size: 1.25rem;
+}
+#bottle-calculator-wrap input[type=text], #bottle-calculator-wrap input[type=tel], #bottle-calculator-wrap input[type=email], #bottle-calculator-wrap textarea, #bottle-calculator-wrap select {
+  border: 1px solid #D0D5DD;
+  border-radius: 0;
+  box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.0509803922);
+  padding: 10px 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+}
+#bottle-calculator-wrap input[type=text]:focus, #bottle-calculator-wrap input[type=tel]:focus, #bottle-calculator-wrap input[type=email]:focus, #bottle-calculator-wrap textarea:focus, #bottle-calculator-wrap select:focus {
+  border-color: black;
+  border-radius: 0;
+}
+#bottle-calculator-wrap input[type=text]:invalid, #bottle-calculator-wrap textarea:invalid, #bottle-calculator-wrap select:invalid {
+  border-color: #dc3232;
+}
+#bottle-calculator-wrap input[type=text]::placeholder, #bottle-calculator-wrap input[type=tel]::placeholder, #bottle-calculator-wrap input[type=email]::placeholder, #bottle-calculator-wrap textarea::placeholder, #bottle-calculator-wrap select::placeholder {
+  color: #667085;
+}
+#bottle-calculator-wrap input[type=text]:disabled, #bottle-calculator-wrap input[type=tel]:disabled, #bottle-calculator-wrap input[type=email]:disabled, #bottle-calculator-wrap textarea:disabled, #bottle-calculator-wrap select:disabled {
+  background-color: #F9FAFB;
+  border-color: #E5E7EB;
+  color: #9CA3AF;
+  cursor: not-allowed;
+}
+#bottle-calculator-wrap input[type=submit], #bottle-calculator-wrap button {
+  min-height: 36px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  background-color: #dc3232;
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: #F9FAFB;
+}
+#bottle-calculator-wrap input[type=button]:hover, #bottle-calculator-wrap input[type=submit]:hover, #bottle-calculator-wrap button:hover {
+  background-color: #b9141c;
+}
+#bottle-calculator-wrap input[type=button]:disabled, #bottle-calculator-wrap input[type=submit]:disabled, #bottle-calculator-wrap button:disabled {
+  background-color: #7a0f15;
+  color: #d9d9d9;
+}
+#bottle-calculator-wrap input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 1px solid #D0D5DD;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+#bottle-calculator-wrap input[type=checkbox]:checked {
+  background-color: #B2151D;
+}
+#bottle-calculator-wrap input[type=checkbox]:checked::before {
+  content: "✓";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  position: relative;
+  bottom: 4px;
+  margin: 2px;
+}
+#bottle-calculator-wrap input[type=file] {
+  padding: 0;
+  border: none;
+  background: #f8f9fa;
+  width: 100%;
+}
+#bottle-calculator-wrap input[type=file]::file-selector-button {
+  border: 1px solid var(--bottle-calc-button-bgcolor);
+  background-color: var(--bottle-calc-button-bgcolor);
+  color: #fff;
+  padding: 8px 29px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#bottle-calculator-wrap input[type=file]::file-selector-button:hover {
+  background-color: var(--bottle-calc-button-bgcolor-hover);
+}
+@media (max-width: 991px) {
+  #bottle-calculator-wrap {
+    flex-wrap: wrap;
+  }
+}
+#bottle-calculator-wrap #bottle-calculator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+#bottle-calculator-wrap #bottle-calculator-card {
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+}
+#bottle-calculator-wrap #bottle-calculator-card div, #bottle-calculator-wrap #bottle-calculator-card canvas {
+  border-radius: 10px;
+}
+#bottle-calculator-wrap aside {
+  min-width: 302px;
+  max-width: 100%;
+  height: auto;
+}
+#bottle-calculator-wrap aside #bottle-calculator-aside {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+#bottle-calculator-wrap #bottle-calculator-spinner-loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.37);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#bottle-calculator-wrap #bottle-calculator-spinner-loading #bottle-calculator-spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid var(--bottle-calc-button-bgcolor);
+  border-top: 6px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+#bottle-calculator-wrap .resize-button, #bottle-calculator-wrap .bottle-download-name, #bottle-calculator-wrap .accept-overlay {
+  margin-top: 2px;
+  width: 100%;
+}
+#bottle-calculator-wrap .bottle-download-name-container {
+  width: 100%;
+  display: flex;
+  margin-top: 2px;
+}
+#bottle-calculator-wrap .bottle-download-name-container-download {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+#bottle-calculator-wrap .bottle-download-name-container-download > * {
+  flex: 1 1 calc(33.333% - 8px);
+  max-width: 33.333%;
+  min-width: 100px;
+}
+@media (max-width: 450px) {
+  #bottle-calculator-wrap .bottle-download-name-container-download > * {
+    flex: 1 1 calc(50% - 4px);
+    max-width: 50%;
+    width: calc(50% - 8px);
+  }
+}
+#bottle-calculator-wrap .modal-enter-active, #bottle-calculator-wrap .modal-leave-active {
+  transition: opacity 0.5s ease;
+}
+#bottle-calculator-wrap .modal-enter, #bottle-calculator-wrap .modal-leave-to {
+  opacity: 0;
+}
+
+.terms-body-text {
+  text-align: justify;
+}
+
+.bottle-download-name,
+.bottle-download-name-container {
+  width: 100%;
+  margin-top: 2px;
+}
+
+.bottle-download-name-container {
+  display: flex;
+}
+
+.bottle-calculator-modal.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+.bottle-calculator-modal .error-msg {
+  color: #dc3232;
+  margin: 16px 0 0 0;
+}
+.bottle-calculator-modal .modal-content {
+  background-color: #fff;
+  width: 100%;
+  max-width: 500px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.bottle-calculator-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 0;
+}
+.bottle-calculator-modal .modal-title {
+  margin: 0 16px 8px 16px;
+  font-size: 1.25rem;
+}
+.bottle-calculator-modal .modal-body {
+  padding: 1rem;
+}
+
+/*# sourceMappingURL=main.css.map */

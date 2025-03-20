@@ -1,0 +1,280 @@
+#bottle-calculator-wrap {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  gap: 16px;
+
+  .form-check-label-bottle-modal, .terms-body-text.expand-btn {
+    position: relative;
+    bottom: 8px;
+  }
+
+  .form-check-label-bottle-modal {
+    margin-left: 12px;
+  }
+
+  .bottle-calculator-card {
+    padding: 24px;
+    border: 1px solid #E8E8E8;
+    background: white;
+    border-radius: 10px;
+
+    h5 {
+      margin: 32px 0 8px 0;
+      font-size: 1.25rem;
+    }
+  }
+
+
+  input[type="text"], input[type="tel"], input[type="email"], textarea, select {
+    border: 1px solid #D0D5DD;
+    border-radius: 0;
+    box-shadow: 0 1px 2px 0 #1018280D;
+    padding: 10px 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+  }
+  input[type="text"]:focus, input[type="tel"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
+    border-color: black;
+    border-radius: 0;
+  }
+  input[type="text"]:invalid, textarea:invalid, select:invalid {
+    border-color: #dc3232;
+  }
+  input[type="text"]::placeholder, input[type="tel"]::placeholder, input[type="email"]::placeholder, textarea::placeholder, select::placeholder {
+    color: #667085;
+  }
+  input[type="text"]:disabled, input[type="tel"]:disabled, input[type="email"]:disabled, textarea:disabled, select:disabled {
+    background-color: #F9FAFB;
+    border-color: #E5E7EB;
+    color: #9CA3AF;
+    cursor: not-allowed;
+  }
+
+  input[type="submit"], button {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    background-color: #dc3232;
+    border: 1px solid transparent;
+    border-radius: 0;
+    color: #F9FAFB;
+  }
+  input[type="button"]:hover, input[type="submit"]:hover, button:hover {
+    background-color: #b9141c;
+  }
+  input[type="button"]:disabled, input[type="submit"]:disabled, button:disabled {
+    background-color: #7a0f15;
+    color: #d9d9d9;
+  }
+
+  input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 1px solid #D0D5DD;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+  input[type="checkbox"]:checked {
+    background-color: #B2151D;
+  }
+  input[type="checkbox"]:checked::before {
+    content: "✓";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    position: relative;
+    bottom: 4px;
+    margin: 2px;
+  }
+
+  input[type="file"] {
+    padding: 0;
+    border: none;
+    background: #f8f9fa;
+    width: 100%;
+
+    &::file-selector-button {
+      border: 1px solid var(--bottle-calc-button-bgcolor);
+      background-color: var(--bottle-calc-button-bgcolor);
+      color: #fff;
+      padding: 8px 29px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: var(--bottle-calc-button-bgcolor-hover);
+      }
+    }
+  }
+
+  @media (max-width: 991px) {
+    flex-wrap: wrap;
+  }
+
+  #bottle-calculator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &-card {
+      border: 1px solid #E8E8E8;
+      border-radius: 10px;
+
+      div, canvas {
+        border-radius: 10px;
+      }
+    }
+  }
+
+  aside {
+    min-width: 302px;
+    max-width: 100%;
+    height: auto;
+
+    #bottle-calculator-aside {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  #bottle-calculator-spinner-loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.37);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #bottle-calculator-spinner {
+      width: 50px;
+      height: 50px;
+      border: 6px solid var(--bottle-calc-button-bgcolor);
+      border-top: 6px solid transparent;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+  }
+
+  .resize-button, .bottle-download-name, .accept-overlay {
+    margin-top: 2px;
+    width: 100%;
+  }
+
+  .bottle-download-name-container {
+    width: 100%;
+    display: flex;
+    margin-top: 2px;
+
+    &-download {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+
+      > * {
+        flex: 1 1 calc(33.333% - 8px);
+        max-width: calc(33.333%);
+        min-width:100px;
+      }
+
+      @media (max-width: 450px) {
+        > * {
+          flex: 1 1 calc(50% - 4px);
+          max-width: calc(50%);
+          width: calc(50% - 8px); // 2 elementy w rzędzie na mniejszych ekranach
+        }
+      }
+    }
+  }
+
+  .modal-enter-active, .modal-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .modal-enter, .modal-leave-to {
+    opacity: 0;
+  }
+
+}
+
+.terms-body-text {
+  text-align: justify;
+}
+
+.bottle-download-name,
+.bottle-download-name-container {
+  width: 100%;
+  margin-top: 2px;
+}
+
+.bottle-download-name-container {
+  display: flex;
+}
+
+
+.bottle-calculator-modal {
+  &.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+  }
+
+  .error-msg {
+    color: #dc3232;
+    margin: 16px 0 0 0;
+  }
+
+  .modal-content {
+    background-color: #fff;
+    width: 100%;
+    max-width: 500px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 0;
+  }
+
+  .modal-title {
+    margin: 0 16px 8px 16px;
+    font-size: 1.25rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+
+}

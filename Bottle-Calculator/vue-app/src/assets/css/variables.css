@@ -1,7 +1,7 @@
 :root {
-    --bottle-calc-button-bgcolor: #4CAF50;
-    --bottle-calc-button-bgcolor-hover: #43bd47;
-    --bottle-calc-button-textcolor: #fff;
-    --bottle-calc-button-textcolor-hover: #fff;
+    --bottle-calc-button-bgcolor: #dc3232;
+    --bottle-calc-button-bgcolor-hover: #b9141c;
+    --bottle-calc-button-textcolor: #d9d9d9;
+    --bottle-calc-button-textcolor-hover: #d9d9d9;
 }
 

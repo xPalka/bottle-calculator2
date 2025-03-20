@@ -2,54 +2,58 @@
 
   <div id="bottle-calculator-wrap">
     <section id="bottle-calculator">
-      <div v-show="loading" id="bottle-calculator-spinner-loading">
-        <div id="bottle-calculator-spinner"></div>
-      </div>
-      <div>
-        <keep-alive>
-          <component :is="selected">
-            <canvas ref="fabricCanvas" class="canvas-overlay"></canvas>
-          </component>
-        </keep-alive>
+      <div id="bottle-calculator-card">
+        <div v-show="loading" id="bottle-calculator-spinner-loading">
+          <div id="bottle-calculator-spinner"></div>
+        </div>
+        <div>
+          <keep-alive>
+            <component :is="selected">
+              <canvas ref="fabricCanvas" class="canvas-overlay"></canvas>
+            </component>
+          </keep-alive>
+        </div>
       </div>
     </section>
 
     <aside ref="bottleCalculatorAside">
       <div id="bottle-calculator-aside">
-        <div style="margin: 10px;">
+        <div class="bottle-calculator-card">
           <div>
-            <h4>Wybierz butelkę</h4>
+            <h5 style="margin-top: 0;">1. Wybierz produkt</h5>
             <select v-model="selectedBottleIndex" @change="selectBottle">
               <option v-for="(bottle, index) in jsonData.bottles" :key="index" :value="index">
-                Butelka {{ index + 1 }}
+                Produkt {{ index + 1 }}
               </option>
             </select>
           </div>
           <div>
-            <h4>Wybierz nakrętkę</h4>
+            <h5>2. Wybierz butelkę</h5>
             <select v-model="selectedCapIndex" @change="loadCapImage">
               <option v-for="(cap, index) in selectedBottle.caps" :key="index" :value="index">
-                Nakrętka {{ index + 1 }}
+                Butelka {{ index + 1 }}
               </option>
             </select>
           </div>
 
 
           <div class="button-row">
-            <h4>Prześlij etykietę</h4>
+            <h5>3. Prześlij etykietę</h5>
             <input id="bottle-label-image-load" ref="fileInput" type="file" @change="uploadImage"/>
             <button class="accept-overlay" v-if="uploadedImage" @click="acceptOverlay">Umieść etykietę</button>
             <div v-if="!uploadedImage" style="height: 37px;"></div>
           </div>
 
           <div id="button-calculator-download-container">
-            <h4>Pobierz swoją butelkę</h4>
+            <h5>4. Pobierz swoją wizualizacje</h5>
             <div class="bottle-download-name-container">
               <input class="bottle-download-name" type="text" v-model="bottleName" maxlength="50" placeholder="Enter the name of your bottle"/>
             </div>
-            <button class="resize-button" :disabled="bottleName === ''" v-for="size in downloadSizes" :key="size.width" @click="resizeAndDownloadImage(size.width, size.height)">
-              {{ size.width }}x{{ size.height }}
-            </button>
+            <div class="bottle-download-name-container-download">
+              <button class="resize-button" :disabled="bottleName === ''" v-for="size in downloadSizes" :key="size.width" @click="resizeAndDownloadImage(size.width, size.height)">
+                {{ size.width }}x{{ size.height }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -214,7 +218,7 @@ export default {
       this.modalWidth = width;
       this.modalHeight = height;
     },
-    handleEmailSubmit(email) {
+    handleEmailSubmit(email, telephone) {
       // Utworzenie tymczasowego elementu canvas
       const tempCanvas = document.createElement('canvas');
 
@@ -258,20 +262,27 @@ export default {
       // Generowanie URL dla pobrania obrazu
       const dataURL = tempCanvas.toDataURL({
         format: 'jpg',
-        quality: 1,
+        quality: 1.0,
       });
 
       // Wywołanie funkcji wysyłającej email
-      this.sendEmailWithImageLink(email, dataURL);
+      const downloadLink = document.createElement("a");
+      downloadLink.href = dataURL;
+      downloadLink.download = this.bottleName+".jpg";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      this.sendEmailWithImageLink('wordpress@program', telephone, dataURL);
       this.acceptOverlay();
     },
 
-    sendEmailWithImageLink(email, dataURL) {
+    sendEmailWithImageLink(email, telephone, dataURL) {
       const data = {
         action: 'save_image_and_send_email',
         email: email,
+        telephone: telephone,
         dataURL: dataURL,
-        fileName: this.bottleName
       };
 
       fetch(`${window.location.origin}/wp-admin/admin-ajax.php`, {
@@ -574,229 +585,10 @@ export default {
 
 <style scoped>
 
-#app h4 {
-  font-family: Arial, serif !important;
-  margin-bottom: 0.25rem;
-  margin-top: 1.5rem;
-}
-
 .canvas-overlay {
   margin: 0;
   display: block;
   background-color: white;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-#bottle-calculator-wrap {
-  display: flex;
-  padding: 20px;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-}
-
-@media (max-width: 991px) {
-  #bottle-calculator-wrap {
-    flex-wrap: wrap;
-  }
-}
-
-#bottle-calculator-wrap #bottle-calculator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  max-width: 600px;
-  position: relative;
-  border: 1px solid #ddd; /* Optional: for visual separation */
-}
-
-#bottle-calculator-wrap aside {
-  min-width: 302px;
-  max-width: 100%; /* Ensure canvas doesn't exceed its container */
-  height: auto; /* Maintain aspect ratio */
-}
-
-#bottle-calculator-wrap aside #bottle-calculator-aside {
-  display: flex;
-  flex-direction: column;
-  background-color: #ddd;
-  height: 100%;
-  width: 100%;
-}
-
-#bottle-calculator-wrap #bottle-calculator {
-  border: 1px solid #ddd;
-
-}
-
-#bottle-calculator-spinner-loading {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.37);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#bottle-calculator-spinner-loading #bottle-calculator-spinner {
-  width: 50px;
-  height: 50px;
-  border: 6px solid var(--bottle-calc-button-bgcolor);
-  border-top: 6px solid transparent;
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
-  }
-  50% {
-    transform: rotate(180deg);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
-  }
-  100% {
-    transform: rotate(360deg);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
-  }
-}
-
-.resize-button  {
-  min-width: 25%;
-  max-width: 50%;
-  width: 100%;
-  margin-top: 2px;
-}
-.bottle-download-name {
-  width: 100%;
-  margin-top: 2px;
-}
-.bottle-download-name-container {
-  width: 100%;
-  display: flex;
-  margin-top: 2px;
-}
-
-
-.accept-overlay {
-  width: 100%;
-  margin-top: 2px;
-}
-
-button {
-  background-color: var(--bottle-calc-button-bgcolor);
-  color: var(--bottle-calc-button-textcolor);
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-top: 10px;
-  min-width: 135px;
-}
-button:hover {
-  background-color: var(--bottle-calc-button-bgcolor-hover);
-  color: var(--bottle-calc-button-textcolor-hover);
-}
-button:disabled {
-  background-color: #6c757d;
-  cursor: default;
-  opacity: .65;
-  color: white;
-}
-
-/* Global styles for input and select elements */
-input,
-select {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
-}
-
-input:focus,
-select:focus {
-  border-color: var(--bottle-calc-button-bgcolor-hover);
-  outline: none;
-}
-
-/* Specific styles for file input */
-input[type="file"] {
-  padding: 0;
-  border: none;
-  background: #f8f9fa;
-}
-
-/* Styles for select element */
-select {
-  -webkit-appearance: none; /* Remove default styles in WebKit browsers */
-  -moz-appearance: none; /* Remove default styles in Firefox */
-  appearance: none; /* Remove default styles */
-  background-color: #fff;
-  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 140 140' width='24' height='24' xmlns='http://www.w3.org/2000/svg'><g><path d='m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z' fill='black'/></g></svg>");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 16px;
-  cursor: pointer;
-}
-
-option:checked {
-  background-color: var(--bottle-calc-button-bgcolor);
-  color: white;
-}
-
-
-select option:checked{
-  background: var(--bottle-calc-button-bgcolor);
-  color:white;
-}
-select option:hover {
-  background: var(--bottle-calc-button-bgcolor-hover);
-  color:white;
-}
-
-/* Styles for select dropdown */
-select::-ms-expand {
-  display: none; /* Hide default dropdown arrow in IE */
-}
-
-select option {
-  background-color: #fff;
-  color: #333;
-}
-
-/* Styles for input[type="file"] */
-input[type="file"]::file-selector-button {
-  border: 1px solid var(--bottle-calc-button-bgcolor);
-  border-radius: 0;
-  background-color: var(--bottle-calc-button-bgcolor);
-  color: #fff;
-  padding: 8px 29px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-input[type="file"]::file-selector-button:hover {
-  background-color: var(--bottle-calc-button-bgcolor-hover);
-}
-
-
-
-.modal-enter-active, .modal-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.modal-enter, .modal-leave-to {
-  opacity: 0;
-}
 </style>
