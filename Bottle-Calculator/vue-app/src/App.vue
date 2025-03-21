@@ -83,19 +83,15 @@
 <script>
 import { fabric } from 'fabric';
 import { markRaw } from 'vue';
-import jsonData from '../public/bottles_dev.json';
+import jsonData from '../public/bottles.json';
 import DownloadModal from "@/components/DownloadModal.vue";
 import * as pdfjsLib from "pdfjs-dist";
-// import pdfWorker from "pdfjs-dist/build/pdf.worker.entry";
-// import pdfWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry'
-// import pdfWorker from "pdfjs-dist/build/pdf.worker";
-
 
 export default {
   components: {DownloadModal},
   data() {
     return {
-      currentLang: 'en', // Domyślny język
+      currentLang: 'pl', // Domyślny język
       translations: {
         pl: {
           step1: "1. Wybierz produkt",
@@ -179,11 +175,9 @@ export default {
     };
   },
   mounted() {
-    // const wpLang = window.wpData?.lang?.split('_')[0] || 'pl';
-    // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
     pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-        'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
-        import.meta.url,
+        "../../pdf.worker.min.mjs",
+        import.meta.url
     ).toString();
 
     this.$nextTick(() => {

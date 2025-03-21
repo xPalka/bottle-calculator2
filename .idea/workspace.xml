@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba4bca5f-434e-4438-8905-e9e08c608b69" name="Changes" comment="feat">
+    <list default="true" id="ba4bca5f-434e-4438-8905-e9e08c608b69" name="Changes" comment="pdf load and images">
+      <change afterPath="$PROJECT_DIR$/Bottle-Calculator/pdf.worker.min.mjs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/babel.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bottle-Calculator/vue-app/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/Bottle-Calculator/vue-app/vue.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +43,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/Programigo/Bottle-Calculator/Bottle-Calculator/vue-app/node_modules/pdfjs-dist/build",
+    "last_opened_file_path": "D:/Programigo/Bottle-Calculator/Bottle-Calculator/vue-app/src",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -58,14 +56,16 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\src" />
+      <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\wasm" />
       <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\node_modules\pdfjs-dist\build" />
       <recent name="D:\Programigo\Bottle-Calculator" />
       <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator" />
-      <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\src" />
+      <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator" />
       <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\public" />
+      <recent name="D:\Programigo\Bottle-Calculator\Bottle-Calculator\vue-app\src" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -82,7 +82,7 @@
       <workItem from="1742378365493" duration="9549000" />
       <workItem from="1742452996985" duration="5554000" />
       <workItem from="1742465676996" duration="7077000" />
-      <workItem from="1742540715439" duration="5901000" />
+      <workItem from="1742540715439" duration="9907000" />
     </task>
     <task id="LOCAL-00001" summary="feat">
       <option name="closed" value="true" />
@@ -116,7 +116,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742475372571</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="pdf load and images">
+      <option name="closed" value="true" />
+      <created>1742547032023</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1742547032023</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,6 +132,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat" />
+    <MESSAGE value="pdf load and images" />
+    <option name="LAST_COMMIT_MESSAGE" value="pdf load and images" />
   </component>
 </project>
