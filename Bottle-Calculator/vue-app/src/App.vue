@@ -83,8 +83,13 @@
 <script>
 import { fabric } from 'fabric';
 import { markRaw } from 'vue';
-import jsonData from '../public/bottles.json';
+import jsonData from '../public/bottles_dev.json';
 import DownloadModal from "@/components/DownloadModal.vue";
+import * as pdfjsLib from "pdfjs-dist";
+// import pdfWorker from "pdfjs-dist/build/pdf.worker.entry";
+// import pdfWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry'
+// import pdfWorker from "pdfjs-dist/build/pdf.worker";
+
 
 export default {
   components: {DownloadModal},
@@ -175,6 +180,11 @@ export default {
   },
   mounted() {
     // const wpLang = window.wpData?.lang?.split('_')[0] || 'pl';
+    // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
+        import.meta.url,
+    ).toString();
 
     this.$nextTick(() => {
       if (typeof fabric !== 'undefined') {
@@ -438,19 +448,61 @@ export default {
     uploadImage(event) {
       const file = event.target.files[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (!fabric) {
-            console.error('Fabric.js is not available.');
-            return;
-          }
-          this.loadForegroundImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
+        const fileType = file.type;
+        const validImageTypes = [
+          "image/png",
+          "image/jpeg",
+          "image/jpg",
+          "image/webp",
+          "image/gif",
+          "image/svg+xml",
+          "image/bmp",
+          "image/tiff",
+          "image/heic",
+          "image/avif"
+        ];
+        const isPDF = fileType === "application/pdf";
+
+        if (validImageTypes.includes(fileType)) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.loadForegroundImage(e.target.result);
+          };
+          reader.readAsDataURL(file);
+        } else if (isPDF) {
+          this.convertPdfToJpg(file);
+        } else {
+          alert("Nieobsługiwany format pliku. Wybierz PNG, JPG, WEBP lub PDF.");
+        }
       }
     },
+    async convertPdfToJpg(pdfFile) {
+      if (!pdfjsLib) {
+        console.error("pdfjsLib is not available.");
+        return;
+      }
 
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const data = new Uint8Array(e.target.result);
 
+        const pdf = await pdfjsLib.getDocument({ data }).promise;
+
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 2 });
+
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        await page.render({ canvasContext: context, viewport }).promise;
+        const imageUrl = canvas.toDataURL("image/jpeg");
+
+        this.loadForegroundImage(imageUrl);
+      };
+      reader.readAsArrayBuffer(pdfFile);
+    },
     loadForegroundImage(imageUrl) {
       fabric.Image.fromURL(imageUrl, (img) => {
 
