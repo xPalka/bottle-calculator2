@@ -23,12 +23,51 @@ function bottle_calc_shortcode() {
     $chunk_file = '/js/chunk-vendors.js';
     $app_file = '/js/app.js';
 
+    // Załaduj tłumaczenia w kontekście tego shortcode
+    $translations = array(
+        'loadingCalculator' => __('Ładowanie kalkulatora ...', 'bottle-calculator'),
+        'visualizationName' => __('Nazwa wizualizacji: ', 'bottle-calculator'),
+        'clientEmail' => __('Email klienta: ', 'bottle-calculator'),
+        'clientPhone' => __('Numer telefonu: ', 'bottle-calculator'),
+        'emailSentSuccess' => __('Wiadomość została wysłana pomyślnie!', 'bottle-calculator'),
+        'emailSendError' => __('Nie udało się wysłać email.', 'bottle-calculator'),
+        'missingParameter' => __('Brak wymaganego parametru.', 'bottle-calculator'),
+        'visualizationSubject' => __('Marki Własne - Wygenerowano wizualizacje', 'bottle-calculator'),
+        // Tłumaczenia dla formularza
+        'step1' => __('1. Wybierz produkt', 'bottle-calculator'),
+        'step2' => __('2. Wybierz butelkę', 'bottle-calculator'),
+        'step3' => __('3. Prześlij etykietę', 'bottle-calculator'),
+        'step4' => __('4. Pobierz swoją wizualizację', 'bottle-calculator'),
+        'product' => __('Produkt', 'bottle-calculator'),
+        'bottle' => __('Butelka', 'bottle-calculator'),
+        'placeLabel' => __('Umieść etykietę', 'bottle-calculator'),
+        'enterName' => __('Podaj nazwę wizualizacji', 'bottle-calculator'),
+        'chooseFile' => __('Wybierz plik', 'bottle-calculator'),
+        'modalTitle' => __('5. Pobierz wizualizacje', 'bottle-calculator'),
+        'email' => __('Adres email', 'bottle-calculator'),
+        'phone' => __('Telefon kontaktowy', 'bottle-calculator'),
+        'emailPlaceholder' => __('Adres email', 'bottle-calculator'),
+        'phonePlaceholder' => __('Telefon', 'bottle-calculator'),
+        'acceptMarketing' => __('Akceptuję zgodę marketingową, która zawiera', 'bottle-calculator'),
+        'acceptTerms' => __('Akceptuję regulamin, który zawiera', 'bottle-calculator'),
+        'showMore' => __('[...]', 'bottle-calculator'),
+        'hideText' => __('[ukryj]', 'bottle-calculator'),
+        'termsText' => __('ipsum dolor sit amet, consectetur adipiscing elit. Quisque id diam sit amet odio tempus auctor...', 'bottle-calculator'),
+        'termsText2' => __('Nam eget risus at magna dictum bibendum. Vivamus ut sapien ac quam condimentum suscipit...', 'bottle-calculator'),
+        'downloadImage' => __('Pobierz obraz', 'bottle-calculator'),
+        'cancel' => __('Anuluj', 'bottle-calculator'),
+        'close' => __('Zamknij', 'bottle-calculator'),
+        'errorMessage' => __('Wystąpił błąd. Spróbuj ponownie.', 'bottle-calculator')
+    );
 
     ob_start();
     ?>
     <div style="max-width: unset;">
         <link href="<?php echo $plugin_url . $css_file; ?>" rel="stylesheet">
         <div id="app">Ładowanie kalkulatora ...</div>
+        <script>
+            window.translations__bottleApp = <?php echo json_encode($translations); ?>;
+        </script>
         <script defer src="<?php echo $plugin_url . $app_file; ?>"></script>
         <script defer src="<?php echo $plugin_url . $chunk_file; ?>"></script>
     </div>
@@ -38,10 +77,9 @@ function bottle_calc_shortcode() {
 add_shortcode('bottle_calculator', 'bottle_calc_shortcode');
 
 function save_image_and_send_email() {
-
     // Sprawdź, czy dane są przekazywane
     if (!isset($_POST['email']) || !isset($_POST['fileName']) || !isset($_POST['telephone'])) {
-        wp_send_json_error('Brak wymaganego parametru.');
+        wp_send_json_error(__('Brak wymaganego parametru.', 'bottle-calculator'));
         wp_die();
     }
 
@@ -49,24 +87,22 @@ function save_image_and_send_email() {
     $telephone = ($_POST['telephone']);
     $fileName = sanitize_text_field($_POST['fileName']);
 
-    $subject = 'Marki Własne - Wygenerowano wizualizacje';
+    $subject = __('Marki Własne - Wygenerowano wizualizacje', 'bottle-calculator');
     $message = "
             <html lang='pl'>
             <head>
-                <title>Marki Własne - Wygenerowano wizualizacje</title>
+                <title>" . __('Marki Własne - Wygenerowano wizualizacje', 'bottle-calculator') . "</title>
             </head>
             <body>
-                <h2>Dane klienta, który wygenerował wizualizację:</h2>
+                <h2>" . __('Dane klienta, który wygenerował wizualizację:', 'bottle-calculator') . "</h2>
                 <ul>
-                    <li>Nazwa wizualizacji: $fileName</li>
-                    <li>Email klienta: $email</li>
-                    <li>Numer telefonu: $telephone</li>
-                    <li></li>
+                    <li>" . __('Nazwa wizualizacji: ', 'bottle-calculator') . "$fileName</li>
+                    <li>" . __('Email klienta: ', 'bottle-calculator') . "$email</li>
+                    <li>" . __('Numer telefonu: ', 'bottle-calculator') . "$telephone</li>
                 </ul>
             </body>
             </html>
             ";
-
 
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
@@ -74,11 +110,10 @@ function save_image_and_send_email() {
     );
 
     if (wp_mail($email, $subject, $message, $headers)) {
-        wp_send_json_success('Wiadomość została wysłana pomyślnie!');
+        wp_send_json_success(__('Wiadomość została wysłana pomyślnie!', 'bottle-calculator'));
     } else {
-        wp_send_json_error('Nie udało się wysłać email.');
+        wp_send_json_error(__('Nie udało się wysłać email.', 'bottle-calculator'));
     }
-
 
     wp_die();
 }
