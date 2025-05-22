@@ -1,42 +1,56 @@
 {
-  "bottles": [
+  "products": [
     {
-      "bottle-full": "/images/example-bottle-1l/example-1l-full.png",
-      "bottle-plastic": "/images/example-bottle-1l/example-1l-plastic.png",
-      "bottle-math": "Math.sin(((x - quarterWidth) / halfWidth) * Math.PI) * (-quarterWidth / 12)",
-      "bottle-side-fraction": 0.325,
-      "caps": [
+      "ID": 0,
+      "bottles": [
         {
-          "image-cap": "/images/example-bottle-1l/cap-1.png",
-          "cap-scale": 0.5,
-          "cap-bottom": 17,
-          "cap-right": 204
-        },
-        {
-          "image-cap": "/images/example-bottle-1l/cap-2.png",
-          "cap-scale": 0.55,
-          "cap-bottom": 92,
-          "cap-right": 265
+          "bottle-name": "5L",
+          "bottle-full": "/images/product-0/kanister-5L.png",
+          "bottle-plastic": "/images/product-0/kanister-5L.png",
+          "bottle-math": "Math.sin(((x - quarterWidth) / halfWidth) * Math.PI) * (-quarterWidth / 12)",
+          "bottle-side-fraction": 1,
+          "cap": {
+            "image-cap": "",
+            "cap-scale": 0,
+            "cap-bottom": 0,
+            "cap-right": 0
+          }
         }
       ]
     },
     {
-      "bottle-full": "/images/example-bottle-5l/example-5l-full.png",
-      "bottle-plastic": "/images/example-bottle-5l/example-5l-plastic.png",
-      "bottle-math": "Math.exp(-(width*100) / (Math.pow(x - halfWidth, 2))) * 20",
-      "bottle-side-fraction": 0.2,
-      "caps": [
+      "ID": 1,
+      "bottles": [
         {
-          "image-cap": "/images/example-bottle-5l/cap-1.png",
-          "cap-scale": 1,
-          "cap-bottom": 29,
-          "cap-right": 150
-        },
+          "bottle-name": "1L",
+          "bottle-full": "/images/example-bottle-1l/example-1l-full.png",
+          "bottle-plastic": "/images/example-bottle-1l/example-1l-plastic.png",
+          "bottle-math": "Math.sin(((x - quarterWidth) / halfWidth) * Math.PI) * (-quarterWidth / 12)",
+          "bottle-side-fraction": 0.325,
+          "cap": {
+            "image-cap": "/images/example-bottle-1l/cap-1.png",
+            "cap-scale": 0.5,
+            "cap-bottom": 17,
+            "cap-right": 204
+          }
+        }
+      ]
+    },
+    {
+      "ID": 2,
+      "bottles": [
         {
-          "image-cap": "/images/example-bottle-5l/cap-2.png",
-          "cap-scale": 1,
-          "cap-bottom": 22,
-          "cap-right": 150
+          "bottle-name": "5L",
+          "bottle-full": "/images/example-bottle-5l/example-5l-full.png",
+          "bottle-plastic": "/images/example-bottle-5l/example-5l-plastic.png",
+          "bottle-math": "Math.exp(-(width*100) / (Math.pow(x - halfWidth, 2))) * 20",
+          "bottle-side-fraction": 0.2,
+          "cap": {
+            "image-cap": "/images/example-bottle-5l/cap-1.png",
+            "cap-scale": 1,
+            "cap-bottom": 29,
+            "cap-right": 150
+          }
         }
       ]
     }

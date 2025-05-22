@@ -20,17 +20,17 @@
         <div class="bottle-calculator-card">
           <div>
             <h5 style="margin-top: 0;">{{ translations.step1 }}</h5>
-            <select v-model="selectedBottleIndex" @change="selectBottle">
-              <option v-for="(bottle, index) in jsonData.bottles" :key="index" :value="index">
-                {{ translations.product }} {{ index + 1 }}
+            <select v-model="selectedProductIndex" @change="selectBottle">
+              <option v-for="(product, index) in jsonData.products" :key="index" :value="index">
+                {{ translations['productName' + product.ID] }}
               </option>
             </select>
           </div>
           <div>
             <h5>{{ translations.step2 }}</h5>
-            <select v-model="selectedCapIndex" @change="loadCapImage">
-              <option v-for="(cap, index) in selectedBottle.caps" :key="index" :value="index">
-                {{ translations.bottle }} {{ index + 1 }}
+            <select v-model="selectedBottleIndex" @change="loadBottleImage">
+              <option v-for="(bottle, index) in selectedProduct.bottles" :key="index" :value="index">
+                {{ translations.bottle }} {{ bottle['bottle-name'] }}
               </option>
             </select>
           </div>
@@ -92,8 +92,8 @@ export default {
     return {
       translations: {},
       loading: true,
+      selectedProductIndex: 0, // Index of the selected bottle in the array
       selectedBottleIndex: 0, // Index of the selected bottle in the array
-      selectedCapIndex: 0, // Index of the selected bottle in the array
       selected: 'appBlack',
       showModal: false,             // modal variable
       bottleName: '',
@@ -140,11 +140,11 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   computed: {
-    selectedBottle() {
-      return this.jsonData.bottles[this.selectedBottleIndex];
+    selectedProduct() {
+      return this.jsonData.products[this.selectedProductIndex];
     },
-    selectedCap() {
-      return this.selectedBottle.caps[this.selectedCapIndex];
+    selectedBottle() {
+      return this.selectedProduct.bottles[this.selectedBottleIndex];
     }
   },
 
@@ -207,24 +207,25 @@ export default {
     },
 
     // responsywne zmienianie szerokości
-    handleResize() {
+    async handleResize() {
       const currentWidth = window.innerWidth;
 
       if (currentWidth !== this.lastWidth) {
         this.lastWidth = currentWidth;
         this.updateCanvasSize();
-        if (this.fabricCanvas) {
-          this.fabricCanvas.setWidth(this.canvasSize);
-          this.fabricCanvas.setHeight(this.canvasSize);
-          this.fabricCanvas.clear();
-          this.loadBackgroundImage();
-        }
         if (this.bufferCanvas) {
           this.bufferCanvas.width = this.canvasSize;
           this.bufferCanvas.height = this.canvasSize;
         }
-      }
+        // if (this.fabricCanvas) {
+        //   this.fabricCanvas.setWidth(this.canvasSize);
+        //   this.fabricCanvas.setHeight(this.canvasSize);
+        //   this.fabricCanvas.clear();
+        //   this.loadBackgroundImage();
+        //   this.uploadedImage = null;
+        // }
 
+      }
     },
 
 
@@ -319,14 +320,14 @@ export default {
       if (this.$refs.fileInput) {
         this.$refs.fileInput.value = '';
       }
-      this.selectedCapIndex = 0;
+      this.selectedBottleIndex = 0;
       this.uploadedImage =  null;
       this.fabricCanvas.clear();
       this.loadBackgroundImage();
     },
 
     // załaduj wybór nakrętki
-    loadCapImage() {
+    loadBottleImage() {
       if (this.capImage  && typeof this.capImage.removeSelf === 'function') {
         this.loadBackgroundImage();
         this.capImage.removeSelf();
@@ -343,8 +344,8 @@ export default {
       }
       const baseUri = window.location.origin;
 
-      const selectedBottle = this.selectedBottle;
-      const backgroundAbsolutePath = baseUri+selectedBottle['bottle-plastic'];
+      const selectedProduct = this.selectedProduct;
+      const backgroundAbsolutePath = baseUri+selectedProduct.bottles[this.selectedBottleIndex]['bottle-plastic'];
       fabric.Image.fromURL(backgroundAbsolutePath, (bgImage) => {
         bgImage.set({
           left: 0,
@@ -357,14 +358,14 @@ export default {
         this.fabricCanvas.setBackgroundImage(bgImage, this.fabricCanvas.renderAll.bind(this.fabricCanvas));
       });
 
-      const selectedCap = this.selectedCap;
-      const backgroundCapAbsolutePath = baseUri+selectedCap['image-cap'];
+      const selectedBottle = this.selectedBottle;
+      const backgroundCapAbsolutePath = baseUri+selectedBottle['cap']['image-cap'];
       fabric.Image.fromURL(backgroundCapAbsolutePath, (capImage) => {
         capImage.set({
-          left: selectedCap['cap-right'] * (this.canvasSize / 600),
-          top: selectedCap['cap-bottom'] * (this.canvasSize / 600),
-          scaleX: selectedCap['cap-scale'] * (this.canvasSize / 600),
-          scaleY: selectedCap['cap-scale'] * (this.canvasSize / 600),
+          left: selectedBottle['cap']['cap-right'] * (this.canvasSize / 600),
+          top: selectedBottle['cap']['cap-bottom'] * (this.canvasSize / 600),
+          scaleX: selectedBottle['cap']['cap-scale'] * (this.canvasSize / 600),
+          scaleY: selectedBottle['cap']['cap-scale'] * (this.canvasSize / 600),
           selectable: false,
           evented: false
         });
@@ -442,55 +443,57 @@ export default {
       };
       reader.readAsArrayBuffer(pdfFile);
     },
+    reloadForegroundImage(img) {
+
+      this.fabricCanvas.clear();
+      this.fabricCanvas.backgroundColor = '';
+      this.fabricCanvas.renderAll();
+
+      const scaleX = this.fabricCanvas.width / img.width;
+      const scaleY = this.fabricCanvas.height / img.height;
+
+      const scale = Math.min(scaleX, scaleY);
+
+      this.uploadedImageScale = scale;
+
+      const scaledWidth = img.width * scale;
+      const scaledHeight = img.height * scale;
+
+      const left = (this.fabricCanvas.width - scaledWidth) / 2;
+      const top = (this.fabricCanvas.height - scaledHeight) / 2;
+
+      img.set({
+        left: left,
+        top: top,
+        scaleX: scale / 4,
+        scaleY: scale / 4,
+        opacity: this.imgOpacity,
+        selectable: true,
+        stroke: 'black',
+        strokeWidth: 4,
+        objectCaching: false,
+        hasControls: true,
+        hasRotatingPoint: false,
+        lockRotation: true,
+        selectionBorderColor: "rgba(255, 255, 255, 0.8)",
+        selectionColor: "rgba(255, 255, 255, 0.8)",
+        selectionLineWidth: 2,
+        borderColor: "black",
+        cornerColor: "black",
+        cornerSize: 8,
+        transparentCorners: false,
+      });
+
+      this.uploadedImage = img;
+      this.loadBackgroundImage();
+      this.fabricCanvas.add(img);
+      this.fabricCanvas.renderAll();
+    },
     loadForegroundImage(imageUrl) {
       fabric.Image.fromURL(imageUrl, (img) => {
-
-        this.fabricCanvas.clear();
-        this.fabricCanvas.backgroundColor = '';
-        this.fabricCanvas.renderAll();
-
-        const scaleX = this.fabricCanvas.width / img.width;
-        const scaleY = this.fabricCanvas.height / img.height;
-
-        const scale = Math.min(scaleX, scaleY);
-
-        this.uploadedImageScale = scale;
-
-        const scaledWidth = img.width * scale;
-        const scaledHeight = img.height * scale;
-
-        const left = (this.fabricCanvas.width - scaledWidth) / 2;
-        const top = (this.fabricCanvas.height - scaledHeight) / 2;
-
-        img.set({
-          left: left,
-          top: top,
-          scaleX: scale / 4,
-          scaleY: scale / 4,
-          opacity: this.imgOpacity,
-          selectable: true,
-          stroke: 'black',
-          strokeWidth: 4,
-          objectCaching: false,
-          hasControls: true,
-          hasRotatingPoint: false,
-          lockRotation: true,
-          selectionBorderColor: "rgba(255, 255, 255, 0.8)",
-          selectionColor: "rgba(255, 255, 255, 0.8)",
-          selectionLineWidth: 2,
-          borderColor: "black",
-          cornerColor: "black",
-          cornerSize: 8,
-          transparentCorners: false,
-        });
-
-        this.uploadedImage = img;
-        this.loadBackgroundImage();
-        this.fabricCanvas.add(img);
-        this.fabricCanvas.renderAll();
+        this.reloadForegroundImage(img);
       });
     },
-
 
     async asyncOperation() {
       return new Promise((resolve) => {
@@ -523,7 +526,7 @@ export default {
 
     // zastosuj fitlr
     applyCylinderWarp() {
-      if (!this.bufferCanvas || !this.uploadedImage) return;
+      if (!this.bufferCanvas || !this.uploadedImage || !this.bufferCtx) return;
 
       const origWidth = this.uploadedImage.width;
       const origHeight = this.uploadedImage.height;
@@ -563,12 +566,12 @@ export default {
 
       const newImageData = this.bufferCtx.createImageData(width, height);
 
-      const bottleMath = this.jsonData.bottles[this.selectedBottleIndex]['bottle-math'];
+      const bottleMath = this.jsonData.products[this.selectedProductIndex].bottles[this.selectedBottleIndex]['bottle-math'];
       const mathFunction = new Function('x', 'width', 'halfWidth', 'quarterWidth', `return ${bottleMath}`);
 
       const quarterWidth = width / 4;
       const halfWidth = width / 2;
-      const sideWidth = width * this.jsonData.bottles[this.selectedBottleIndex]['bottle-side-fraction'];
+      const sideWidth = width * this.jsonData.products[this.selectedProductIndex].bottles[this.selectedBottleIndex]['bottle-side-fraction'];
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
@@ -630,8 +633,6 @@ export default {
           // this.uploadedImage = null;
           this.fabricCanvas.renderAll();
         });
-      } else {
-        console.error('Background image not loaded.');
       }
     }
 

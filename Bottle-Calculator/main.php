@@ -25,6 +25,10 @@ function bottle_calc_shortcode() {
 
     // Załaduj tłumaczenia w kontekście tego shortcode
     $translations = array(
+        'productName0' => __('HoReCa - Preparat do mycia samochodów', 'bottle-calculator'),
+        'productName1' => __('Automotive - Szampon samochodowy z woskiem', 'bottle-calculator'),
+        'productName2' => __('Chemia techniczna - Preparaty do myjni samochodowych', 'bottle-calculator'),
+
         'loadingCalculator' => __('Ładowanie kalkulatora ...', 'bottle-calculator'),
         'visualizationName' => __('Nazwa wizualizacji: ', 'bottle-calculator'),
         'clientEmail' => __('Email klienta: ', 'bottle-calculator'),
